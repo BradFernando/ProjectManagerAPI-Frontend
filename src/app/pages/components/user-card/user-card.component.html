@@ -1,0 +1,103 @@
+<div class="modal-backdrop" (click)="closeModal()"></div>
+<div class="user-modal">
+  <div class="modal-close-btn" (click)="closeModal()">✖</div> <!-- Botón de cerrar modal -->
+  <div class="sidebar">
+    <ul>
+      <li [class.active]="activeTab === 'profile'" (click)="switchTab('profile')">Perfil</li>
+      <li [class.active]="activeTab === 'security'" (click)="switchTab('security')">Seguridad</li>
+    </ul>
+  </div>
+  <div class="user-modal-content">
+    <!-- Profile Tab -->
+    <div *ngIf="activeTab === 'profile'">
+      <div class="profile-section">
+        <div class="profile-info">
+          <img [src]="userAvatar || 'assets/default-avatar.png'" alt="User Avatar" class="profile-avatar">
+          <div class="profile-details">
+            <h3>{{ userForm.get('firstName')?.value }} {{ userForm.get('lastName')?.value }}</h3>
+            <button (click)="toggleEditSection('profile')">Actualizar perfil</button>
+          </div>
+        </div>
+        <div *ngIf="isEditingProfile" class="edit-section" [formGroup]="userForm">
+          <h4>Actualizar perfil</h4>
+          <div class="form-group">
+            <label for="firstName">Nombres</label>
+            <input type="text" id="firstName" formControlName="firstName">
+          </div>
+          <div class="form-group">
+            <label for="lastName">Apellidos</label>
+            <input type="text" id="lastName" formControlName="lastName">
+          </div>
+          <button (click)="saveProfile()">Guardar</button>
+          <button (click)="toggleEditSection('profile')">Cancelar</button>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-group">
+          <label for="userName">Username</label>
+          <div class="form-editable">
+            <span>{{ userForm.get('userName')?.value }}</span>
+            <button (click)="toggleEditSection('username')">Actualizar username</button>
+          </div>
+        </div>
+        <div *ngIf="isEditingUsername" class="edit-section" [formGroup]="userForm">
+          <h4>Actualizar username</h4>
+          <div class="form-group">
+            <input type="text" id="userName" formControlName="userName">
+          </div>
+          <button (click)="saveUsername()">Guardar</button>
+          <button (click)="toggleEditSection('username')">Cancelar</button>
+        </div>
+
+        <!-- Email section -->
+        <div class="form-group">
+          <label>Email</label>
+          <div class="form-editable">
+            <span>{{ userForm.get('email')?.value }}</span>
+            <span class="badge">Por defecto</span>
+          </div>
+          <button class="add-email-btn">+ Añadir otro correo</button>
+        </div>
+
+        <!-- Connected accounts section -->
+        <div class="form-group">
+          <label>Manten conectadas tus cuentas</label>
+          <div class="connected-accounts">
+            <span class="google-account">Google - {{ userForm.get('email')?.value }}</span>
+          </div>
+          <button class="connect-account-btn">+ Cuenta de Google</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security Tab -->
+    <div *ngIf="activeTab === 'security'">
+      <div class="security-section">
+        <div class="security-section">
+          <h3>Seguridad</h3>
+          <div class="password-section">
+            <label style="margin-right: 10px;">Contraseña</label>
+            <button (click)="toggleEditSection('password')">Actualizar Contraseña</button>
+          </div>
+          <div *ngIf="isEditingPassword" class="edit-section" [formGroup]="userForm">
+            <h4>Cambiar Contraseña</h4>
+            <div class="form-group">
+              <label for="newPassword">Nueva Contraseña</label>
+              <input type="password" id="newPassword" formControlName="newPassword" minlength="8">
+              <div *ngIf="userForm.get('newPassword')?.errors?.['minlength']" class="error">
+                La contraseña debe tener más de 8 caracteres.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="confirmPassword">Confirmar Contraseña</label>
+              <input type="password" id="confirmPassword" formControlName="confirmPassword">
+            </div>
+            <button (click)="savePassword()">Guardar</button>
+            <button (click)="toggleEditSection('password')">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

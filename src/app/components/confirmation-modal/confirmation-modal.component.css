@@ -1,0 +1,41 @@
+/* src/app/components/confirmation-modal/confirmation-modal.component.css */
+.modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+h2 {
+  margin-top: 0;
+  color: #4CAF50;
+}
+
+p {
+  margin: 20px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.close-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.close-button:hover {
+  background-color: #45a049;
+}
