@@ -57,11 +57,12 @@ export class UserService {
     return this.http.put<any>(`${this.apiUrl}/${id}`, user, { headers });
   }
 
-  // Eliminar usuario
+// Eliminar usuario
   deleteUser(id: number): Observable<string> {
     const headers = this.createAuthorizationHeader();
-    return this.http.delete<string>(`${this.apiUrl}/${id}`, { headers });
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers, responseType: 'text' });
   }
+
 
   // Método para crear el encabezado de autorización con el token
   private createAuthorizationHeader(): HttpHeaders {

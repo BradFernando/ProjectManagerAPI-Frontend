@@ -1,9 +1,11 @@
+/* Estilo del Sidenav */
 .sidenav {
   background: #263238;
-  transition: all .5s ease;
+  transition: width 0.45s ease-in-out; /* Suave transición */
   position: fixed;
   z-index: 1;
   top: 0;
+  left: 0;
   width: 5rem;
   height: 100vh;
   box-shadow: 0.063rem 0 1.25rem 0 #8690a3;
@@ -103,45 +105,44 @@
   color: #000;
 }
 
+/* Estilo del Header */
 .head {
-  width: 100%;
-  transition: width 0.3s ease;
+  width: calc(100% - 5rem);
+  margin-left: 5rem;
+  z-index: 1;
+  transition: margin-left 10s ease-in-out, width 10s ease-in-out; /* Suave transición */
+  background: #f4f7fa;
+  position: fixed;
+  top: 0;
+  height: 4rem;
+  display: flex;
+  align-items: center;
 }
-
 .sidenav-collapsed .head {
-  width: calc(100% - 80px); /* Adjust the width based on the collapsed sidenav width */
+  width: calc(100% - 16.5625rem);
+  margin-left: 16.5625rem;
 }
 
 .head-content {
+  background-color: #fff;
+  border-radius: 0.625rem;
+  box-shadow: 0 0 10px 0 rgb(34 41 47 / 10%);
+  padding: 0.813rem 1.563rem;
+  width: 100%;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  transition: all 0.3s ease;
 }
 
-.sidenav-collapsed .head-content {
-  padding: 0 10px; /* Adjust padding to make elements more compact */
+/* Estilo del contenido principal */
+.main-content {
+  margin-top: 4rem; /* Ajusta según la altura del header */
+  margin-left: 6rem; /* Mueve un poco cuando el sidenav está colapsado */
+  transition: margin-left .3s ease; /* Suave transición */
+  padding: 1rem;
 }
 
-.head-content-left, .head-content-right {
-  display: flex;
-  align-items: center;
-}
-
-.head-content-left .search-container {
-  display: flex;
-  align-items: center;
-}
-
-.head-content-right .head-menu {
-  display: flex;
-  align-items: center;
-}
-
-.head-content-right .head-menu-item {
-  margin: 0 5px; /* Adjust margin to make elements more compact */
-}
-
-.head-content-right .head-user-avatar-container {
-  margin-left: 10px; /* Adjust margin to make elements more compact */
+.sidenav-collapsed ~ .main-content {
+  margin-left: 16.5625rem; /* Margen cuando el sidenav está expandido */
+  width: calc(100% - 16.5625rem); /* Ajuste del ancho relativo al tamaño del sidenav */
 }

@@ -50,7 +50,8 @@
   <app-user-card
     *ngIf="isUserCardVisible"
     (closeModalEvent)="isUserCardVisible = false"
-    [isVisible]="isUserCardVisible">
+    [isVisible]="isUserCardVisible"
+    class="user-modal"> <!-- Asegúrate de que la clase 'user-modal' esté aquí -->
   </app-user-card>
 </div>
 

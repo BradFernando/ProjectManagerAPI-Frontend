@@ -1,0 +1,104 @@
+<div class="container custom-container">
+  <div class="custom-card">
+    <div class="custom-card-header">
+      {{ isEditMode ? 'Editar Usuario' : 'Crear Nuevo Usuario' }}
+    </div>
+    <div class="custom-card-body">
+      <form [formGroup]="createUserForm" (ngSubmit)="onSubmit()">
+
+        <div *ngIf="isLoading" class="loader-container">
+          <div class="loader"></div> <!-- Este es tu spinner o barra de carga -->
+        </div>
+
+        <div class="form-row">
+          <div class="custom-form-group col-6">
+            <label for="firstName">Nombre <span class="text-danger">*</span></label>
+            <input id="firstName" formControlName="firstName" class="custom-form-control" placeholder="Ingrese el nombre" required/>
+            <div *ngIf="createUserForm.get('firstName')?.invalid && createUserForm.get('firstName')?.touched" class="text-danger">
+              El nombre es obligatorio.
+            </div>
+          </div>
+
+          <div class="custom-form-group col-6">
+            <label for="lastName">Apellido <span class="text-danger">*</span></label>
+            <input id="lastName" formControlName="lastName" class="custom-form-control" placeholder="Ingrese el apellido" required/>
+            <div *ngIf="createUserForm.get('lastName')?.invalid && createUserForm.get('lastName')?.touched" class="text-danger">
+              El apellido es obligatorio.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="custom-form-group col-6">
+            <label for="email">Correo Electrónico <span class="text-danger">*</span></label>
+            <input id="email" formControlName="email" class="custom-form-control" placeholder="Ingrese el correo electrónico" required/>
+            <div *ngIf="createUserForm.get('email')?.invalid && createUserForm.get('email')?.touched" class="text-danger">
+              El correo electrónico es obligatorio y debe ser válido.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="custom-form-group col-6">
+            <label for="userName">Usuario <span class="text-danger">*</span></label>
+            <input id="userName" formControlName="userName" class="custom-form-control" placeholder="Ingrese el usuario" required/>
+            <div *ngIf="createUserForm.get('userName')?.invalid && createUserForm.get('userName')?.touched" class="text-danger">
+              El usuario es obligatorio.
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="custom-form-group col-6">
+              <label for="password">{{ passwordLabel }} <span class="text-danger">*</span></label>
+              <input id="password" type="password" formControlName="password" class="custom-form-control" [readonly]="isEditMode" required/>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form-row" *ngIf="isEditMode">
+          <div class="custom-form-group col-6">
+            <label for="newPassword">Nueva Contraseña <span class="text-danger">*</span></label>
+            <input id="newPassword" type="password" formControlName="newPassword" class="custom-form-control" placeholder="Ingrese la nueva contraseña" required/>
+            <div *ngIf="createUserForm.get('newPassword')?.invalid && createUserForm.get('newPassword')?.touched" class="text-danger">
+              La nueva contraseña es obligatoria.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="custom-form-group col-6">
+            <label for="avatar">Avatar</label>
+            <input id="avatar" type="file" (change)="onFileSelected($event)" class="custom-form-control-file"/>
+          </div>
+          <div *ngIf="selectedImage" class="col-6 image-preview-container">
+            <img [src]="selectedImage" alt="Preview" class="image-preview"/>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="custom-form-group col-12">
+            <label for="type">Tipo de Usuario <span class="text-danger">*</span></label>
+            <select id="type" formControlName="type" class="custom-form-control" required>
+              <option [value]="1">Administrador</option>
+              <option [value]="0">Staff</option>
+            </select>
+            <div *ngIf="createUserForm.get('type')?.invalid && createUserForm.get('type')?.touched" class="text-danger">
+              El tipo de usuario es obligatorio.
+            </div>
+          </div>
+        </div>
+
+
+        <div class="custom-form-buttons">
+          <button type="submit" class="custom-btn custom-btn-primary" [disabled]="createUserForm.invalid">
+            {{ isEditMode ? 'Actualizar' : 'Guardar' }}
+          </button>
+          <button type="button" class="custom-btn custom-btn-secondary" (click)="router.navigate(['/sidenav/list-users'])">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

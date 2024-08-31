@@ -88,12 +88,13 @@ export class HeaderComponent implements OnInit {
   getHeadClass(): string {
     let styleClass = '';
     if (this.collapsed && this.screenWidth > 768) {
-      styleClass = 'head-trimmed';
+      styleClass = 'head-trimmed'; // Cuando el sidenav está expandido
     } else {
-      styleClass = 'head-md-screen';
+      styleClass = 'head-md-screen'; // Cuando el sidenav está colapsado
     }
     return styleClass;
   }
+
 
   checkCanShowSearchAsOverlay(innerWidth: number): void {
     this.canShowSearchAsOverlay = innerWidth < 845;
