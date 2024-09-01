@@ -1,0 +1,18 @@
+<div class="report-list-container">
+  <h3>Lista de Reportes de Trabajo</h3>
+  <div *ngFor="let report of workReports" class="report-card">
+    <p [innerHTML]="report.description"></p>
+    <p><strong>Horas Trabajadas:</strong> {{ report.hoursWorked }}</p>
+    <div class="report-card-buttons">
+      <button class="btn-approve" (click)="approveReport(report.id)">
+        <span class="fa fa-thumbs-up"></span>
+      </button>
+      <button class="btn-reject" (click)="rejectReport(report.id)">
+        <span class="fa fa-thumbs-down"></span>
+      </button>
+      <button class="btn-download" (click)="generatePdf(report)">
+        <span class="fa fa-file-pdf-o"></span> Descargar PDF
+      </button>
+    </div>
+  </div>
+</div>

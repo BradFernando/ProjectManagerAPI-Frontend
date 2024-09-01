@@ -1,0 +1,103 @@
+.container {
+  padding: 30px; /* Aumenta el padding para dar más espacio alrededor */
+  max-width: 90%; /* Ancho máximo del contenedor */
+  margin: 0 auto; /* Centra el contenedor */
+}
+
+.card {
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 20px; /* Agrega padding interno a la tarjeta */
+}
+
+.table {
+  width: 100%;
+  table-layout: auto;
+  margin-bottom: 20px; /* Añade un margen inferior para separación */
+}
+
+.table th, .table td {
+  padding: 12px 15px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.table th {
+  font-weight: 600;
+  background-color: #f9f9f9;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.table td {
+  background-color: #fff;
+}
+
+.table-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #007bff, #0056b3); /* Añadido gradiente para un mejor estilo */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Añadido efecto hover */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #0056b3, #003d82); /* Hover más oscuro */
+  transform: translateY(-2px); /* Efecto de levantamiento en hover */
+}
+
+.btn-custom {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: none;
+  margin-right: 5px; /* Añadido margen derecho para separar los botones */
+}
+
+.btn-edit {
+  background-color: #0056b3; /* Azul frío y definido */
+  color: white;
+}
+
+.btn-edit:hover {
+  background-color: #004494; /* Azul más oscuro para el hover */
+}
+
+.btn-delete {
+  background-color: #dc3545; /* Rojo frío y definido */
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #b52a37; /* Rojo más oscuro para el hover */
+}
+
+
+.pagination-controls {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.pagination-controls .ng2-pagination {
+  display: inline-block;
+}
+
+input.form-control, select.form-select {
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 4px;
+  margin-left: 5px; /* Espacio entre el texto del label y el input */
+}

@@ -1,0 +1,64 @@
+<div class="container">
+  <h2>Áreas de Trabajo</h2>
+  <button class="btn-add" (click)="openAreaModal()">+ Agregar Área de Trabajo</button>
+  <div class="area-list">
+    <div *ngFor="let area of areas" class="area-item">
+      <p>{{ area.name }} <span>(Compañía: {{ getCompanyNameById(area.companyId) }})</span></p>
+      <button class="btn-edit" (click)="openAreaModal(area)">Editar</button>
+    </div>
+  </div>
+
+  <h2>Tipos de Trabajo</h2>
+  <button class="btn-add" (click)="openJobTypeModal()">+ Agregar Tipo de Trabajo</button>
+  <div class="jobtype-list">
+    <div *ngFor="let jobType of jobTypes" class="jobtype-item">
+      <p>{{ jobType.description }}</p>
+      <button class="btn-edit" (click)="openJobTypeModal(jobType)">Editar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para agregar/editar área de trabajo -->
+<div class="modal" *ngIf="showModal">
+  <div class="modal-content">
+    <span class="close" (click)="closeAreaModal()">&times;</span>
+    <h2>{{ selectedArea ? 'Editar Área de Trabajo' : 'Agregar Área de Trabajo' }}</h2>
+    <form [formGroup]="areaForm" (ngSubmit)="saveArea()" class="form-container">
+      <div class="form-group">
+        <label for="areaName">Nombre del Área</label>
+        <input id="areaName" formControlName="name" type="text" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="companyId">Compañía</label>
+        <select id="companyId" formControlName="companyId" class="form-control">
+          <option *ngFor="let company of companies" [value]="company.id">{{ company.name }}</option>
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" [disabled]="!areaForm.valid" class="btn-submit">Guardar</button>
+        <button *ngIf="selectedArea" type="button" class="btn-delete" (click)="deleteArea()">Eliminar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal para agregar/editar tipo de trabajo -->
+<div class="modal" *ngIf="showJobTypeModal">
+  <div class="modal-content">
+    <span class="close" (click)="closeJobTypeModal()">&times;</span>
+    <h2>{{ selectedJobType ? 'Editar Tipo de Trabajo' : 'Agregar Tipo de Trabajo' }}</h2>
+    <form [formGroup]="jobTypeForm" (ngSubmit)="saveJobType()" class="form-container">
+      <div class="form-group">
+        <label for="jobTypeDescription">Agrega aqui un tipo de trabajo a realizar</label>
+        <input id="jobTypeDescription" formControlName="description" type="text" class="form-control">
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" [disabled]="!jobTypeForm.valid" class="btn-submit">Guardar</button>
+        <button *ngIf="selectedJobType" type="button" class="btn-delete" (click)="deleteJobType()">Eliminar</button>
+      </div>
+    </form>
+  </div>
+</div>

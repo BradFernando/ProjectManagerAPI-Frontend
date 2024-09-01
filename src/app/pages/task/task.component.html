@@ -1,0 +1,69 @@
+<div class="container custom-container">
+  <div class="custom-card">
+    <div class="custom-card-header">
+      Asignación de Tareas
+    </div>
+    <div class="custom-card-body">
+      <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <div class="custom-form-group col-12">
+            <label for="title">Título de la Tarea <span class="text-danger">*</span></label>
+            <input id="title" formControlName="title" class="custom-form-control" placeholder="Ingrese el título de la tarea" required/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="custom-form-group col-12">
+            <label for="employeeId">Asignar a Empleado <span class="text-danger">*</span></label>
+            <select id="employeeId" formControlName="employeeId" class="custom-form-control" required>
+              <option *ngFor="let employee of employees" [value]="employee.id">{{ employee.firstName }} {{ employee.lastName }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="custom-form-group col-12">
+            <label for="description">Descripción de la Tarea <span class="text-danger">*</span></label>
+            <textarea id="description" formControlName="description" class="custom-form-control" placeholder="Ingrese una descripción para la tarea" required></textarea>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="custom-form-group col-12">
+            <label for="status">Estado de la Tarea <span class="text-danger">*</span></label>
+            <select id="status" formControlName="status" class="custom-form-control" required>
+              <option value="Pendiente">Pendiente</option>
+              <option value="Completado">Completado</option>
+            </select>
+          </div>
+        </div>
+        <div class="custom-form-buttons">
+          <button type="submit" class="custom-btn custom-btn-primary" [disabled]="!taskForm.valid">Guardar Tarea</button>
+          <button type="button" class="custom-btn custom-btn-delete" (click)="deleteTask()" [disabled]="!isEditMode">Eliminar</button>
+          <button type="button" class="custom-btn custom-btn-secondary" (click)="resetForm()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="custom-table-container">
+    <h3>Lista de Tareas</h3>
+    <table class="custom-table">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Título</th>
+        <th>Descripción</th>
+        <th>Empleado</th>
+        <th>Estado</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let task of tasks; let i = index" (click)="editTask(task)">
+        <td>{{ i + 1 }}</td>
+        <td>{{ task.title }}</td>
+        <td>{{ task.description }}</td>
+        <td>{{ getEmployeeNameById(task.employeeId) }}</td>
+        <td><span class="badge" [ngClass]="{'badge-pending': task.status === 'Pendiente', 'badge-completed': task.status === 'Completado'}">{{ task.status }}</span></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

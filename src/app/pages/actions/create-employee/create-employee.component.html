@@ -1,0 +1,76 @@
+<div class="container custom-container">
+  <div class="custom-card">
+    <div class="custom-card-header">
+      {{ isEditMode ? 'Editar Empleado' : 'Crear Nuevo Empleado' }}
+    </div>
+    <div class="custom-card-body">
+      <form [formGroup]="createEmployeeForm" (ngSubmit)="onSubmit()">
+
+        <div *ngIf="isLoading" class="loader-container">
+          <div class="loader"></div>
+        </div>
+
+        <div class="form-row">
+          <div class="custom-form-group col-6">
+            <label for="ci">C.I. <span class="text-danger">*</span></label>
+            <input id="ci" formControlName="ci" class="custom-form-control" placeholder="Ingrese el C.I." required/>
+            <div *ngIf="createEmployeeForm.get('ci')?.invalid && createEmployeeForm.get('ci')?.touched" class="text-danger">
+              El C.I. es obligatorio.
+            </div>
+          </div>
+
+          <div class="custom-form-group col-6">
+            <label for="firstName">Nombre <span class="text-danger">*</span></label>
+            <input id="firstName" formControlName="firstName" class="custom-form-control" placeholder="Ingrese el nombre" required/>
+            <div *ngIf="createEmployeeForm.get('firstName')?.invalid && createEmployeeForm.get('firstName')?.touched" class="text-danger">
+              El nombre es obligatorio.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="custom-form-group col-6">
+            <label for="lastName">Apellido <span class="text-danger">*</span></label>
+            <input id="lastName" formControlName="lastName" class="custom-form-control" placeholder="Ingrese el apellido" required/>
+            <div *ngIf="createEmployeeForm.get('lastName')?.invalid && createEmployeeForm.get('lastName')?.touched" class="text-danger">
+              El apellido es obligatorio.
+            </div>
+          </div>
+
+          <div class="custom-form-group col-6">
+            <label for="email">Correo Electrónico <span class="text-danger">*</span></label>
+            <input id="email" formControlName="email" class="custom-form-control" placeholder="Ingrese el correo electrónico" required/>
+            <div *ngIf="createEmployeeForm.get('email')?.invalid && createEmployeeForm.get('email')?.touched" class="text-danger">
+              El correo electrónico es obligatorio y debe ser válido.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="custom-form-group col-6">
+            <label for="areaId">Área <span class="text-danger">*</span></label>
+            <select id="areaId" formControlName="areaId" class="custom-form-control" required>
+              <option *ngFor="let area of areas" [value]="area.id">{{ area.name }}</option>
+            </select>
+          </div>
+
+          <div class="custom-form-group col-6">
+            <label for="jobTypeId">Tipo de Trabajo <span class="text-danger">*</span></label>
+            <select id="jobTypeId" formControlName="jobTypeId" class="custom-form-control" required>
+              <option *ngFor="let jobType of jobTypes" [value]="jobType.id">{{ jobType.description }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="custom-form-buttons">
+          <button type="submit" class="custom-btn custom-btn-primary" [disabled]="isLoading || createEmployeeForm.invalid">
+            {{ isLoading ? 'Guardando...' : (isEditMode ? 'Actualizar' : 'Guardar') }}
+          </button>
+          <button type="button" class="custom-btn custom-btn-secondary" (click)="router.navigate(['/sidenav/list-employees'])" [disabled]="isLoading">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

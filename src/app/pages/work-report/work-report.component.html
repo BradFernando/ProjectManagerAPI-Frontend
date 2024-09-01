@@ -1,0 +1,51 @@
+<div class="container custom-container">
+  <div class="custom-card">
+    <div class="custom-card-header">
+      Crear Reporte de Trabajo
+    </div>
+    <div class="custom-card-body">
+      <form [formGroup]="workReportForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="startDate">Fecha y Hora Inicio</label>
+          <!-- Removemos el formControlName ya que no existe en el FormGroup -->
+          <input type="datetime-local" id="startDate" class="custom-form-control" (change)="calculateAndSetHoursWorked()" />
+        </div>
+
+        <div class="form-group">
+          <label for="endDate">Fecha y Hora Fin</label>
+          <!-- Removemos el formControlName ya que no existe en el FormGroup -->
+          <input type="datetime-local" id="endDate" class="custom-form-control" (change)="calculateAndSetHoursWorked()" />
+        </div>
+
+        <div class="form-group">
+          <label for="taskId">Tarea</label>
+          <select id="taskId" formControlName="taskId" class="custom-form-control" (change)="onTaskChange($event)">
+            <option *ngFor="let task of tasks" [value]="task.id">{{ task.title }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="employeeName">Empleado Asignado</label>
+          <input type="text" id="employeeName" [value]="assignedEmployeeName" class="custom-form-control" readonly />
+        </div>
+
+        <!-- Campo para mostrar las horas trabajadas -->
+        <div class="form-group">
+          <label for="hoursWorked">Horas Trabajadas</label>
+          <input type="number" id="hoursWorked" formControlName="hoursWorked" class="custom-form-control" readonly />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Descripción del Reporte</label>
+          <!-- Asegurarse de que Summernote actualiza el campo correctamente -->
+          <textarea id="description" class="form-control"></textarea>
+        </div>
+
+        <div class="custom-form-buttons">
+          <button type="submit" class="custom-btn custom-btn-primary">Guardar</button>
+          <button type="button" class="custom-btn custom-btn-secondary" (click)="onCancel()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

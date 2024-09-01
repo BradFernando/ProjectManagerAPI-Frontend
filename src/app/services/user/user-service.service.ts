@@ -39,11 +39,15 @@ export class UserService {
     return this.http.get<any>(`${this.apiUrl}/${id}`, { headers });
   }
 
-  // Obtener un usuario por su userName
+// user-service.service.ts
   getUserByUserName(userName: string): Observable<any> {
     const headers = this.createAuthorizationHeader();
-    return this.http.get<any>(`${this.apiUrl}/byusername`, { headers, params: { userName } });
+    return this.http.get<any>(`${this.apiUrl}/byusername`, {
+      headers: headers,
+      params: { userName: userName } // Asegúrate de que el parámetro es exactamente 'userName'
+    });
   }
+
 
   // Obtener usuario por email
   getUserByEmail(email: string): Observable<any> {

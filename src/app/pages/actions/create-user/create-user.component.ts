@@ -64,9 +64,16 @@ export class CreateUserComponent implements OnInit {
         // Hacer que la nueva contraseña sea obligatoria en modo de edición
         this.createUserForm.get('newPassword')?.setValidators([Validators.required]);
         this.createUserForm.get('newPassword')?.updateValueAndValidity();
+
+        // Deshabilitar el campo 'password' en modo edición
+        this.createUserForm.get('password')?.disable();
       } else {
         this.passwordLabel = 'Contraseña'; // Etiqueta para nuevo usuario
         this.createUserForm.get('password')?.enable(); // Habilitar el campo de contraseña para nuevo usuario
+
+        // Deshabilitar el campo 'newPassword' si no estamos en modo edición
+        this.createUserForm.get('newPassword')?.clearValidators();
+        this.createUserForm.get('newPassword')?.updateValueAndValidity();
       }
     });
 
@@ -106,8 +113,8 @@ export class CreateUserComponent implements OnInit {
   }
 
   onSubmit(): void {
+    console.log('Form submitted');
     if (this.createUserForm.invalid) {
-      // Forzar que todos los campos muestren sus errores si el formulario es inválido
       this.createUserForm.markAllAsTouched();
       Swal.fire('Error', 'Por favor completa todos los campos obligatorios.', 'error');
       return;
@@ -116,6 +123,35 @@ export class CreateUserComponent implements OnInit {
     this.isLoading = true; // Inicia el loader
     const user = this.createUserForm.value;
 
+    // Verificación de nombre de usuario único
+    this.userService.getUserByUserName(user.userName).subscribe(
+      (existingUser) => {
+        if (!this.isEditMode && existingUser) {
+          // Si estamos creando un usuario y el nombre de usuario ya existe
+          this.isLoading = false; // Detiene el loader
+          Swal.fire('Error', 'El nombre de usuario ya existe. Por favor, elige otro.', 'error');
+        } else if (this.isEditMode && existingUser && existingUser.id !== this.userId) {
+          // Si estamos actualizando un usuario y el nombre de usuario ya existe y no es el mismo usuario
+          this.isLoading = false; // Detiene el loader
+          Swal.fire('Error', 'El nombre de usuario ya existe. Por favor, elige otro.', 'error');
+        } else {
+          // Continuar con el flujo normal de guardado o actualización
+          this.continueSaveOrUpdate(user);
+        }
+      },
+      error => {
+        if (error.status === 404) {
+          // Si no se encuentra el usuario (404), significa que el nombre de usuario no existe y podemos continuar
+          this.continueSaveOrUpdate(user);
+        } else {
+          this.isLoading = false; // Detiene el loader si ocurre un error
+          Swal.fire('Error', 'Hubo un problema al verificar el nombre de usuario.', 'error');
+        }
+      }
+    );
+  }
+
+  continueSaveOrUpdate(user: any): void {
     if (user.type === 1 && this.loggedInUser.type !== 1) {
       Swal.fire('Permiso denegado', 'No tienes permiso para crear/editar un administrador', 'error');
       this.isLoading = false; // Detiene el loader si ocurre un error
@@ -127,9 +163,12 @@ export class CreateUserComponent implements OnInit {
     if (this.isEditMode) {
       user.id = this.userId;
       user.password = user.newPassword; // Usa la nueva contraseña
+    } else {
+      user.password = user.newPassword; // Asegurarse de que la contraseña se establezca para nuevos usuarios
     }
 
     if (this.selectedFile) {
+      console.log('Uploading file...');
       this.cloudinaryService.uploadImage(this.selectedFile).subscribe(
         response => {
           user.avatar = response.imageUrl;
@@ -147,6 +186,7 @@ export class CreateUserComponent implements OnInit {
 
   proceedWithSaveOrUpdate(user: any): void {
     if (this.isEditMode && this.userId) {
+      // Actualizar usuario existente
       this.userService.updateUser(this.userId, user).subscribe(
         response => {
           this.isLoading = false; // Detiene el loader
@@ -155,39 +195,24 @@ export class CreateUserComponent implements OnInit {
         },
         error => {
           this.isLoading = false; // Detiene el loader si ocurre un error
-          console.error('Error al actualizar el usuario:', error);
           Swal.fire('Error', 'Hubo un problema al actualizar el usuario', 'error');
         }
       );
     } else {
+      // Crear nuevo usuario
       this.userService.registerUser(user).subscribe(
         response => {
+          console.log('User created successfully:', response);
           this.isLoading = false; // Detiene el loader
           Swal.fire('Usuario creado', 'El usuario ha sido creado exitosamente', 'success');
           this.router.navigate(['/sidenav/list-users']);
         },
         error => {
+          console.error('Error creating user:', error);
           this.isLoading = false; // Detiene el loader si ocurre un error
-          console.error('Error al crear el usuario:', error);
           Swal.fire('Error', 'Hubo un problema al crear el usuario', 'error');
         }
       );
-    }
-  }
-
-  deleteUser(): void {
-    if (this.userId && (this.loggedInUser.type === 1 || this.loggedInUser.id === this.userId)) {
-      this.userService.deleteUser(this.userId).subscribe(
-        response => {
-          Swal.fire('Usuario eliminado', 'El usuario ha sido eliminado exitosamente', 'success');
-          this.router.navigate(['/sidenav/list-users']);
-        },
-        error => {
-          Swal.fire('Error', 'Hubo un problema al eliminar el usuario', 'error');
-        }
-      );
-    } else {
-      Swal.fire('Permiso denegado', 'No tienes permiso para eliminar este usuario', 'error');
     }
   }
 }

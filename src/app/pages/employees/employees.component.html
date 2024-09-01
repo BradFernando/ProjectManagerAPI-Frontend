@@ -1,0 +1,57 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h3>Lista de Empleados</h3>
+      <button class="btn btn-primary" (click)="goToCreateEmployee()">+ Crear Nuevo</button>
+    </div>
+    <div class="card-body">
+      <div class="table-controls">
+        <div class="entries-control">
+          <label>
+            Mostrar
+            <select [(ngModel)]="entriesToShow" class="form-select">
+              <option *ngFor="let size of [10, 25, 50, 100]" [value]="size">{{ size }}</option>
+            </select>
+            entradas
+          </label>
+        </div>
+        <div class="search-control">
+          <label>
+            Buscar:
+            <input type="text" [(ngModel)]="searchTerm" class="form-control">
+          </label>
+        </div>
+      </div>
+      <table class="table table-hover table-responsive">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>C.I.</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Área</th>
+          <th>Tipo de Trabajo</th>
+          <th style="width: 180px;">Acción</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let employee of employees | paginate: { itemsPerPage: entriesToShow, currentPage: page } | filter: searchTerm; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ employee.ci }}</td>
+          <td>{{ employee.firstName }} {{ employee.lastName }}</td>
+          <td>{{ employee.email }}</td>
+          <td>{{ getAreaNameById(employee.areaId) }}</td>
+          <td>{{ getJobTypeNameById(employee.jobTypeId) }}</td>
+          <td>
+            <button class="btn-custom btn-edit" (click)="editEmployee(employee.id)">Editar</button>
+            <button class="btn-custom btn-delete" (click)="deleteEmployee(employee.id)">Eliminar</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="pagination-controls">
+        <pagination-controls (pageChange)="page = $event"></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

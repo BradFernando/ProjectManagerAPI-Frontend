@@ -5,9 +5,9 @@ export const navbarData = [
     label: 'Dashboard'
   },
   {
-    routeLink: 'list-projects',
+    routeLink: 'area-work-type',
     icon: 'fas fa-list-alt',
-    label: 'Lista de Proyectos'
+    label: 'Area y Tipo de Trabajo'
   },
   {
     routeLink: 'list-employees',
@@ -15,24 +15,24 @@ export const navbarData = [
     label: 'Lista de Empleados'
   },
   {
-    routeLink: 'time-report',
+    routeLink: 'work-report',
     icon: 'fas fa-area-chart',
-    label: 'Tiempo Reportado'
+    label: 'Reportes de Trabajo'
   },
   {
-    routeLink: 'time-worked-employee',
+    routeLink: 'list-end-reports',
     icon: 'fas fa-thumbs-up',
-    label: 'Tiempo por Empleado'
+    label: 'Listado Final de Reportes'
   },
   {
-    routeLink: 'time-worked-project-asignation',
+    routeLink: 'task-designation',
     icon: 'fas  fa-puzzle-piece',
-    label: 'Tiempo por Proyecto'
+    label: 'Asignación de Tareas'
   },
   {
-    routeLink: 'list-works',
+    routeLink: 'list-companies',
     icon: 'fas fa-table',
-    label: 'Lista de Trabajos'
+    label: 'Lista de Empresas'
   },
   {
     routeLink: 'list-users',

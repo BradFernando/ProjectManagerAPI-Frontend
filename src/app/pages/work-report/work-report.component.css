@@ -1,0 +1,129 @@
+/* Contenedor principal del formulario */
+.custom-container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff; /* Fondo blanco para el contenedor principal */
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Sombra para el contenedor */
+}
+
+/* Tarjeta de formulario */
+.custom-card {
+  background-color: #f4f7fa; /* Fondo de la tarjeta */
+  border-radius: 12px;
+  overflow: hidden; /* Para evitar que el contenido se desborde */
+}
+
+/* Encabezado de la tarjeta */
+.custom-card-header {
+  background-color: #1e3d7b; /* Color de fondo del encabezado */
+  color: #fff; /* Color del texto */
+  padding: 15px;
+  text-align: center; /* Centrado del texto */
+  font-weight: bold; /* Negrita para el texto */
+}
+
+/* Cuerpo de la tarjeta */
+.custom-card-body {
+  padding: 20px;
+}
+
+/* Control de formulario personalizado */
+.custom-form-control {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+  margin-bottom: 15px;
+  transition: border-color 0.3s; /* Transición suave para el borde */
+}
+
+.custom-form-control:focus {
+  border-color: #1e3d7b; /* Color de borde en el foco */
+  outline: none; /* Eliminar el borde de enfoque predeterminado */
+}
+
+/* Botones del formulario */
+.custom-form-buttons {
+  display: flex;
+  justify-content: flex-end; /* Alinear botones a la derecha */
+  gap: 10px; /* Espacio entre botones */
+  margin-top: 20px;
+}
+
+.custom-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Transición suave para el color de fondo */
+}
+
+.custom-btn-primary {
+  background-color: #1e3d7b; /* Color de fondo del botón primario */
+  color: white;
+}
+
+.custom-btn-primary:hover {
+  background-color: #163366; /* Color de fondo al pasar el mouse */
+}
+
+.custom-btn-secondary {
+  background-color: #6c757d; /* Color de fondo del botón secundario */
+  color: white;
+}
+
+.custom-btn-secondary:hover {
+  background-color: #565e64; /* Color de fondo al pasar el mouse */
+}
+
+/* Contenedor de la lista de reportes */
+.report-list-container {
+  margin-top: 40px;
+}
+
+/* Tarjeta de reporte individual */
+.report-card {
+  background-color: white;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra para mayor profundidad */
+}
+
+/* Botones de la tarjeta de reporte */
+.report-card-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.btn-approve {
+  background-color: #28a745; /* Color de fondo del botón de aprobar */
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-approve:hover {
+  background-color: #218838; /* Color de fondo al pasar el mouse */
+}
+
+.btn-reject {
+  background-color: #dc3545; /* Color de fondo del botón de rechazar */
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-reject:hover {
+  background-color: #c82333; /* Color de fondo al pasar el mouse */
+}
