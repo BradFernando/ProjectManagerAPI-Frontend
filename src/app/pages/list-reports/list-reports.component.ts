@@ -4,7 +4,7 @@ import { WorkReportDto } from '../../services/models/work-report.dto';
 import { NgForOf, NgIf } from '@angular/common';
 import Swal from 'sweetalert2';
 import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable'; // Importa autoTable para crear tablas
+import autoTable from 'jspdf-autotable';
 import { AuthService } from "../../services/security/auth.service";
 import { TaskService } from '../../services/system/task/task.service';
 import { EmployeeService } from '../../services/system/employee/employee.service';
@@ -22,7 +22,7 @@ export class ListReportsComponent implements OnInit {
   workReports: WorkReportDto[] = [];
   tasks: TaskDto[] = [];
   employees: EmployeeDto[] = [];
-  currentUser: string | undefined = undefined; // Usuario autenticado
+  currentUser: string | undefined = undefined;
 
   constructor(
     private workReportService: WorkReportService,
@@ -35,7 +35,7 @@ export class ListReportsComponent implements OnInit {
     this.fetchWorkReports();
     this.fetchTasks();
     this.fetchEmployees();
-    this.currentUser = this.authService.getUser()?.userName; // Obtener usuario autenticado
+    this.currentUser = this.authService.getUser()?.userName;
   }
 
   fetchWorkReports(): void {
@@ -82,31 +82,28 @@ export class ListReportsComponent implements OnInit {
     return employee ? `${employee.firstName} ${employee.lastName}` : 'Desconocido';
   }
 
-  generatePdf(report: WorkReportDto): void {
+  generateAndSendPdf(report: WorkReportDto, taskStatus: string): void {
     const employeeName = this.getEmployeeNameById(report.employeeId);
     const taskName = this.getTaskNameById(report.taskId);
-    const description = report.description.replace(/<\/?[^>]+(>|$)/g, ""); // Remover etiquetas HTML
+    const description = report.description.replace(/<\/?[^>]+(>|$)/g, "");
 
     const doc = new jsPDF();
 
-    // Encabezado con color
-    doc.setFillColor(34, 41, 55); // Color de fondo
-    doc.rect(0, 0, 210, 30, 'F'); // Rectángulo para encabezado
+    doc.setFillColor(34, 41, 55);
+    doc.rect(0, 0, 210, 30, 'F');
     doc.setFontSize(22);
-    doc.setTextColor(255, 255, 255); // Color del texto
+    doc.setTextColor(255, 255, 255);
     doc.setFont("helvetica", "bold");
     doc.text("Reporte de Trabajo", 105, 20, { align: "center" });
 
-    // Subtítulo
     doc.setFontSize(12);
-    doc.setTextColor(0, 0, 0); // Cambiar a color negro
+    doc.setTextColor(0, 0, 0);
     doc.setFont("helvetica", "normal");
     doc.text(`Estimado ${employeeName}, su reporte de trabajo está considerado con lo siguiente:`, 10, 50);
 
-    // Información en tabla
     autoTable(doc, {
       startY: 60,
-      margin: { top: 60 }, // Añadir margen superior
+      margin: { top: 60 },
       head: [['Detalle', 'Información']],
       body: [
         ['Horas Trabajadas', report.hoursWorked.toString()],
@@ -114,47 +111,175 @@ export class ListReportsComponent implements OnInit {
         ['Comentarios', description],
         ['Revisor', this.currentUser || 'undefined'],
       ],
-      theme: 'striped', // Tema con líneas
-      headStyles: { fillColor: [34, 41, 55], textColor: 255 }, // Color del encabezado
-      bodyStyles: { textColor: 50, lineColor: [0, 0, 0], lineWidth: 0.1 }, // Ajuste de estilo para el cuerpo
-      alternateRowStyles: { fillColor: [240, 240, 240] }, // Alternar color de fila
-      styles: { minCellHeight: 10 }, // Altura mínima de la celda
-      didDrawCell: (data) => {
-        // Ajuste de celda si el texto es demasiado largo
-        if (data.column.dataKey === 'Comentarios' && data.cell.text[0].length > 50) {
-          doc.setFontSize(10);
-          data.cell.styles.minCellHeight = 15; // Incrementar altura de celda
-        }
-      }
+      theme: 'striped',
+      headStyles: { fillColor: [34, 41, 55], textColor: 255 },
+      bodyStyles: { textColor: 50, lineColor: [0, 0, 0], lineWidth: 0.1 },
+      alternateRowStyles: { fillColor: [240, 240, 240] },
+      styles: { minCellHeight: 10 },
     });
 
-    // Firma simulada (un simple símbolo o texto estilizado)
-    doc.setFontSize(20);
-    doc.setFont("cursive");
-    doc.setTextColor(50, 50, 50);
-    doc.text("+", 160, doc.internal.pageSize.height - 50); // Añadir un símbolo que represente una firma
-    doc.text("PMA Solutions", 140, doc.internal.pageSize.height - 40); // Texto estilizado como firma
+    let finalY = (doc as any).lastAutoTable.finalY + 10;
 
-    // Pie de página
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.text("Estado del Trabajo:", 10, finalY);
+
+    if (taskStatus === 'Completado') {
+      doc.setTextColor(0, 128, 0);
+    } else if (taskStatus === 'Pendiente') {
+      doc.setTextColor(255, 165, 0);
+    } else if (taskStatus === 'Rechazada') {
+      doc.setTextColor(255, 0, 0);
+    }
+
+    doc.text(`Por lo tanto, hecha las evaluaciones pertinentes su trabajo está considerado como: ${taskStatus}`, 10, finalY + 10);
+
+    doc.setFontSize(20);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(50, 50, 50);
+    doc.text("+", 160, doc.internal.pageSize.height - 50);
+    doc.text("PMA Solutions", 140, doc.internal.pageSize.height - 40);
+
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
     doc.text("Es un placer atenderle.", 10, doc.internal.pageSize.height - 30);
     doc.text("Por favor, contacte con nosotros si tiene alguna pregunta o necesita más información.", 10, doc.internal.pageSize.height - 20);
 
-    // Firma de texto
     doc.setFontSize(12);
     doc.text("Atentamente,", 10, doc.internal.pageSize.height - 10);
     doc.text("Equipo de Project Manager API", 10, doc.internal.pageSize.height - 3);
 
-    // Guardar PDF
-    doc.save(`Reporte_${report.id}.pdf`);
+    // Generar el PDF como blob para enviar
+    const pdfBlob = doc.output('blob');
+    const formData: FormData = new FormData();
+    formData.append('pdf', pdfBlob, `Reporte_${report.id}_${new Date().getTime()}.pdf`);
+    formData.append('employeeId', report.employeeId.toString());
+    formData.append('reportId', report.id.toString());
+
+    // Enviar el PDF al servidor con el estado correcto
+    this.workReportService.sendReport(formData).subscribe(
+      (response) => {
+        console.log('Respuesta del servidor:', response);
+        Swal.fire('Éxito', 'Reporte enviado correctamente.', 'success');
+      },
+      (error) => {
+        console.error('Error al enviar el reporte:', error);
+        Swal.fire('Error', `Hubo un problema al enviar el reporte: ${error.message || 'Error desconocido'}`, 'error');
+      }
+    );
   }
 
   approveReport(reportId: number): void {
-    Swal.fire('Aprobado', 'Reporte aprobado exitosamente.', 'success');
+    const report = this.workReports.find(r => r.id === reportId);
+    if (report) {
+      const taskId = report.taskId;
+      this.updateTaskStatus(taskId, 'Completado', report);
+    }
   }
 
   rejectReport(reportId: number): void {
-    Swal.fire('Rechazado', 'Reporte rechazado exitosamente.', 'success');
+    const report = this.workReports.find(r => r.id === reportId);
+    if (report) {
+      const taskId = report.taskId;
+      this.updateTaskStatus(taskId, 'Rechazada', report);
+    }
+  }
+
+  updateTaskStatus(taskId: number, status: string, report: WorkReportDto): void {
+    this.taskService.getTaskById(taskId).subscribe(
+      (task) => {
+        task.status = status;
+        this.taskService.updateTask(taskId, task).subscribe(
+          () => {
+            console.log(`Tarea ${taskId} actualizada a estado: ${status}`);
+            this.fetchTasks();
+            this.generateAndSendPdf(report, status); // Generar y enviar PDF con el estado actualizado
+          },
+          (error) => {
+            console.error('Error al actualizar el estado de la tarea:', error);
+            Swal.fire('Error', 'Hubo un problema al actualizar el estado de la tarea.', 'error');
+          }
+        );
+      },
+      (error) => {
+        console.error('Error fetching task:', error);
+        Swal.fire('Error', 'Hubo un problema al obtener la tarea.', 'error');
+      }
+    );
+  }
+
+  downloadLocalPdf(report: WorkReportDto): void {
+    const employeeName = this.getEmployeeNameById(report.employeeId);
+    const taskName = this.getTaskNameById(report.taskId);
+    const description = report.description.replace(/<\/?[^>]+(>|$)/g, "");
+
+    // Obtener el estado de la tarea asociada al reporte
+    const task = this.tasks.find(t => t.id === report.taskId);
+    const taskStatus = task ? task.status : 'Desconocido';
+
+    const doc = new jsPDF();
+
+    doc.setFillColor(34, 41, 55);
+    doc.rect(0, 0, 210, 30, 'F');
+    doc.setFontSize(22);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.text("Reporte de Trabajo", 105, 20, { align: "center" });
+
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Estimado ${employeeName}, su reporte de trabajo está considerado con lo siguiente:`, 10, 50);
+
+    autoTable(doc, {
+      startY: 60,
+      margin: { top: 60 },
+      head: [['Detalle', 'Información']],
+      body: [
+        ['Horas Trabajadas', report.hoursWorked.toString()],
+        ['Tarea Asignada', taskName],
+        ['Comentarios', description],
+        ['Revisor', this.currentUser || 'undefined'],
+      ],
+      theme: 'striped',
+      headStyles: { fillColor: [34, 41, 55], textColor: 255 },
+      bodyStyles: { textColor: 50, lineColor: [0, 0, 0], lineWidth: 0.1 },
+      alternateRowStyles: { fillColor: [240, 240, 240] },
+      styles: { minCellHeight: 10 },
+    });
+
+    let finalY = (doc as any).lastAutoTable.finalY + 10;
+
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.text("Estado del Trabajo:", 10, finalY);
+
+    if (taskStatus === 'Completado') {
+      doc.setTextColor(0, 128, 0);
+    } else if (taskStatus === 'Pendiente') {
+      doc.setTextColor(255, 165, 0);
+    } else if (taskStatus === 'Rechazada') {
+      doc.setTextColor(255, 0, 0);
+    }
+
+    doc.text(`Por lo tanto, hecha las evaluaciones pertinentes su trabajo está considerado como: ${taskStatus}`, 10, finalY + 10);
+
+    doc.setFontSize(20);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(50, 50, 50);
+    doc.text("+", 160, doc.internal.pageSize.height - 50);
+    doc.text("PMA Solutions", 140, doc.internal.pageSize.height - 40);
+
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.text("Es un placer atenderle.", 10, doc.internal.pageSize.height - 30);
+    doc.text("Por favor, contacte con nosotros si tiene alguna pregunta o necesita más información.", 10, doc.internal.pageSize.height - 20);
+
+    doc.setFontSize(12);
+    doc.text("Atentamente,", 10, doc.internal.pageSize.height - 10);
+    doc.text("Equipo de Project Manager API", 10, doc.internal.pageSize.height - 3);
+
+    // Descargar el PDF en lugar de enviarlo
+    doc.save(`Reporte_${report.id}_${new Date().getTime()}.pdf`);
   }
 }

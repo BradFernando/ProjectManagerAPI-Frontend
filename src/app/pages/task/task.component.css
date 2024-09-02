@@ -113,6 +113,39 @@
   background-color: #c82333;
 }
 
+/* Botón de aprobación */
+.btn-approve {
+  background-color: #28a745;
+  color: #ffffff;
+  border: none;
+}
+
+.btn-approve:hover {
+  background-color: #218838;
+}
+
+/* Botón de rechazo */
+.btn-reject {
+  background-color: #dc3545;
+  color: #ffffff;
+  border: none;
+}
+
+.btn-reject:hover {
+  background-color: #c82333;
+}
+
+/* Botón de descarga */
+.btn-download {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+}
+
+.btn-download:hover {
+  background-color: #0056b3;
+}
+
 /* Contenedor de la tabla */
 .custom-table-container {
   margin-top: 30px;
@@ -161,6 +194,14 @@
 
 .badge-completed {
   background-color: #28a745;
+  color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.badge-rejected {
+  background-color: #dc3545;
   color: #ffffff;
   padding: 5px 10px;
   border-radius: 5px;

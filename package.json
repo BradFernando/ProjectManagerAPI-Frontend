@@ -28,6 +28,7 @@
     "@popperjs/core": "^2.11.8",
     "@tinymce/tinymce-angular": "^8.0.1",
     "bootstrap": "^5.3.3",
+    "chart.js": "^4.4.4",
     "crypto-js": "^4.2.0",
     "html2canvas": "^1.4.1",
     "jquery": "^3.7.1",

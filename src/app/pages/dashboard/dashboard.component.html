@@ -1,1 +1,55 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  <!-- KPIs -->
+  <div class="kpi-cards">
+    <!-- Total Tareas como gráfico de Donut -->
+    <div class="kpi-item">
+      <h3>Total Tareas</h3>
+      <canvas id="totalTasksDonut"></canvas>
+    </div>
+
+    <!-- Empleados Activos representado con iconos de personas -->
+    <div class="kpi-item">
+      <h3>Empleados Activos</h3>
+      <div class="icon-container">
+        <span *ngFor="let i of [].constructor(activeEmployees); let idx = index">
+          <i class="fas fa-user fa-2x" [ngClass]="{'active-icon': idx < activeEmployees}"></i>
+        </span>
+      </div>
+    </div>
+
+    <!-- Horas Trabajadas Promedio como gráfico de Velocímetro -->
+    <div class="kpi-item">
+      <h3>Horas Trabajadas Promedio</h3>
+      <canvas id="averageHoursGauge"></canvas>
+    </div>
+  </div>
+
+  <!-- Gráficas de tareas -->
+  <div class="charts">
+    <div class="chart-container">
+      <canvas id="barChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="pieChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Estrellas de la Semana -->
+  <div class="star-employees">
+    <h3>Estrellas de la Semana</h3>
+    <div class="employee-panel">
+      <div class="employee-card" *ngFor="let employee of starEmployees">
+        <div class="employee-icon">
+          {{ employee.firstName.charAt(0) }}
+        </div>
+        <div class="employee-details">
+          <h4>{{ employee.firstName }} {{ employee.lastName }}</h4>
+          <p>Email: {{ employee.email }}</p>
+          <div class="stars">
+            <i class="fas fa-star" *ngFor="let star of [1, 2, 3, 4, 5]"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

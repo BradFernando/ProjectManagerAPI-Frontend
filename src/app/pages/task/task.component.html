@@ -30,7 +30,6 @@
             <label for="status">Estado de la Tarea <span class="text-danger">*</span></label>
             <select id="status" formControlName="status" class="custom-form-control" required>
               <option value="Pendiente">Pendiente</option>
-              <option value="Completado">Completado</option>
             </select>
           </div>
         </div>
@@ -61,7 +60,11 @@
         <td>{{ task.title }}</td>
         <td>{{ task.description }}</td>
         <td>{{ getEmployeeNameById(task.employeeId) }}</td>
-        <td><span class="badge" [ngClass]="{'badge-pending': task.status === 'Pendiente', 'badge-completed': task.status === 'Completado'}">{{ task.status }}</span></td>
+        <td>
+          <span class="badge" [ngClass]="{'badge-pending': task.status === 'Pendiente', 'badge-completed': task.status === 'Completado', 'badge-rejected': task.status === 'Rechazada'}">
+            {{ task.status }}
+          </span>
+        </td>
       </tr>
       </tbody>
     </table>

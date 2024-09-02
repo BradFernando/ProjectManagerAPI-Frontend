@@ -1,3 +1,17 @@
+/* Título de la sección de Empresas */
+.company-section-title {
+  width: 100%;
+  max-width: 1000px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.company-section-title h2 {
+  font-size: 24px;
+  color: #333;
+  margin: 0;
+}
+
 .company-container {
   display: flex;
   flex-wrap: wrap;
